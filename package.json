@@ -1,0 +1,19 @@
+{
+  "name": "onedrive-file-sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "16.4.5",
+    "@azure/msal-node": "2.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.30",
+    "typescript": "5.4.5"
+  }
+}
