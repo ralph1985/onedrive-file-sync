@@ -4,10 +4,10 @@ Bidirectional sync for a single file using Microsoft Graph. Designed for local c
 
 ## Setup
 
-1) Register an app in Azure Portal (Microsoft Entra ID).
-2) Add a redirect URI (e.g. `http://localhost:53682`).
-3) Ensure delegated permissions include `Files.ReadWrite`.
-4) Copy `.env.example` to `.env` and fill values.
+1. Register an app in Azure Portal (Microsoft Entra ID).
+2. Add a redirect URI (e.g. `http://localhost:53682`).
+3. Ensure delegated permissions include `Files.ReadWrite`.
+4. Copy `.env.example` to `.env` and fill values.
 
 ## Install & build
 
@@ -16,6 +16,14 @@ Requires Node.js 18+ (for native `fetch`).
 ```bash
 npm install
 npm run build
+```
+
+## Lint & format
+
+```bash
+npm run lint
+npm run format
+npm run typecheck
 ```
 
 ## First run (interactive)
