@@ -8,14 +8,20 @@ import { cachePath, config, scopes } from './config.js';
 const authority = `https://login.microsoftonline.com/${config.tenantId}`;
 
 const cachePlugin = {
-  beforeCacheAccess: async (cacheContext: { cacheHasChanged: boolean; tokenCache: { deserialize: (cache: string) => void } }) => {
+  beforeCacheAccess: async (cacheContext: {
+    cacheHasChanged: boolean;
+    tokenCache: { deserialize: (cache: string) => void };
+  }) => {
     if (!fsSync.existsSync(cachePath)) {
       return;
     }
     const cache = await fs.readFile(cachePath, 'utf8');
     cacheContext.tokenCache.deserialize(cache);
   },
-  afterCacheAccess: async (cacheContext: { cacheHasChanged: boolean; tokenCache: { serialize: () => string } }) => {
+  afterCacheAccess: async (cacheContext: {
+    cacheHasChanged: boolean;
+    tokenCache: { serialize: () => string };
+  }) => {
     if (cacheContext.cacheHasChanged) {
       const cache = cacheContext.tokenCache.serialize();
       await fs.writeFile(cachePath, cache, 'utf8');
@@ -34,6 +40,11 @@ const msalConfig: Configuration = {
 };
 
 const msalClient = new PublicClientApplication(msalConfig);
+
+async function persistTokenCache(): Promise<void> {
+  const cache = msalClient.getTokenCache().serialize();
+  await fs.writeFile(cachePath, cache, 'utf8');
+}
 
 async function waitForAuthCode(redirect: string): Promise<string> {
   const redirectUrl = new URL(redirect);
@@ -85,6 +96,7 @@ export async function acquireToken(): Promise<string> {
         scopes,
       });
       if (result?.accessToken) {
+        await persistTokenCache();
         return result.accessToken;
       }
     } catch {
@@ -111,5 +123,6 @@ export async function acquireToken(): Promise<string> {
     throw new Error('Failed to acquire access token');
   }
 
+  await persistTokenCache();
   return tokenResult.accessToken;
 }

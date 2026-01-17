@@ -1,12 +1,13 @@
 # OneDrive File Sync (Personal)
 
 Bidirectional sync for a single file using Microsoft Graph. Designed for local cron usage with "last write wins".
+This variant uses the app folder scope, so the app only sees its own OneDrive folder.
 
 ## Setup
 
 1. Register an app in Azure Portal (Microsoft Entra ID).
 2. Add a redirect URI (e.g. `http://localhost:53682`).
-3. Ensure delegated permissions include `Files.ReadWrite`.
+3. Ensure delegated permissions include `Files.ReadWrite.AppFolder`.
 4. Copy `.env.example` to `.env` and fill values.
 
 ## Install & build
@@ -57,4 +58,5 @@ Example cron (every 5 minutes):
 ## Notes
 
 - If both sides change between runs, the newest mtime wins.
-- The script assumes the OneDrive path is relative to root (e.g. `Documents/mi.txt`).
+- The script assumes the OneDrive path is relative to the app folder (e.g. `data/mi.txt`).
+- The app folder appears in OneDrive under `Apps/<app-name>/`.

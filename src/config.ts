@@ -1,7 +1,13 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REQUIRED_ENV = ['LOCAL_FILE_PATH', 'ONEDRIVE_FILE_PATH', 'CLIENT_ID', 'TENANT_ID', 'REDIRECT_URI'] as const;
+const REQUIRED_ENV = [
+  'LOCAL_FILE_PATH',
+  'ONEDRIVE_FILE_PATH',
+  'CLIENT_ID',
+  'TENANT_ID',
+  'REDIRECT_URI',
+] as const;
 
 type EnvKey = (typeof REQUIRED_ENV)[number];
 
@@ -32,4 +38,4 @@ export const config = {
 export const cachePath = path.join(config.authDir, 'msal-cache.json');
 export const statePath = path.join(config.stateDir, 'state.json');
 
-export const scopes = ['Files.ReadWrite', 'offline_access'];
+export const scopes = ['Files.ReadWrite.AppFolder', 'offline_access', 'openid', 'profile'];

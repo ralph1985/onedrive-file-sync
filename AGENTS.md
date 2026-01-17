@@ -5,6 +5,7 @@
 - Single-file bidirectional sync for OneDrive Personal via Microsoft Graph.
 - Local-only automation intended for cron usage.
 - Auth uses MSAL with auth code flow and token cache under `.auth/`.
+- Graph access uses the app folder scope (`Files.ReadWrite.AppFolder`) to limit access.
 - State is stored under `.state/` (mtime/hash + remote metadata).
 
 ## Project Structure

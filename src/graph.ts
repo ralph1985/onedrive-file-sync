@@ -12,6 +12,10 @@ function encodeDrivePath(rawPath: string): string {
   return encodeURI(trimmed);
 }
 
+function buildDrivePath(rawPath: string): string {
+  return `/me/drive/special/approot:/${encodeDrivePath(rawPath)}`;
+}
+
 async function graphRequest<T>(token: string, url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...options,
@@ -33,8 +37,11 @@ async function graphRequest<T>(token: string, url: string, options?: RequestInit
   return (await response.json()) as T;
 }
 
-export async function getRemoteMetadata(token: string, remotePath: string): Promise<DriveItem | null> {
-  const url = `https://graph.microsoft.com/v1.0/me/drive/root:/${encodeDrivePath(remotePath)}?select=id,name,lastModifiedDateTime`;
+export async function getRemoteMetadata(
+  token: string,
+  remotePath: string
+): Promise<DriveItem | null> {
+  const url = `https://graph.microsoft.com/v1.0${buildDrivePath(remotePath)}?select=id,name,lastModifiedDateTime`;
   try {
     return await graphRequest<DriveItem>(token, url);
   } catch (err) {
@@ -45,8 +52,12 @@ export async function getRemoteMetadata(token: string, remotePath: string): Prom
   }
 }
 
-export async function downloadFile(token: string, remotePath: string, localPath: string): Promise<void> {
-  const url = `https://graph.microsoft.com/v1.0/me/drive/root:/${encodeDrivePath(remotePath)}:/content`;
+export async function downloadFile(
+  token: string,
+  remotePath: string,
+  localPath: string
+): Promise<void> {
+  const url = `https://graph.microsoft.com/v1.0${buildDrivePath(remotePath)}:/content`;
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -63,8 +74,12 @@ export async function downloadFile(token: string, remotePath: string, localPath:
   await fs.writeFile(localPath, Buffer.from(arrayBuffer));
 }
 
-export async function uploadFile(token: string, localPath: string, remotePath: string): Promise<void> {
-  const url = `https://graph.microsoft.com/v1.0/me/drive/root:/${encodeDrivePath(remotePath)}:/content`;
+export async function uploadFile(
+  token: string,
+  localPath: string,
+  remotePath: string
+): Promise<void> {
+  const url = `https://graph.microsoft.com/v1.0${buildDrivePath(remotePath)}:/content`;
   const content = await fs.readFile(localPath);
 
   const response = await fetch(url, {
