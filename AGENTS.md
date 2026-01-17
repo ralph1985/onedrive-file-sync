@@ -43,4 +43,5 @@
 ## Commit Guidelines
 
 - Conventional commits (`feat:`, `fix:`, `chore:`, etc.).
+- Use Commitizen via `npm run commit` for interactive commit messages.
 - Commit messages in English.
