@@ -26,6 +26,12 @@ npm run format
 npm run typecheck
 ```
 
+## Conventional commits
+
+```bash
+npm run commit
+```
+
 ## First run (interactive)
 
 ```bash

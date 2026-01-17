@@ -11,7 +11,8 @@
     "lint": "eslint . --max-warnings=0",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "cz"
   },
   "dependencies": {
     "dotenv": "16.4.5",
@@ -26,7 +27,16 @@
     "eslint-config-prettier": "9.1.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
-    "prettier": "3.2.5"
+    "prettier": "3.2.5",
+    "@commitlint/cli": "18.6.1",
+    "@commitlint/config-conventional": "18.6.2",
+    "commitizen": "4.3.0",
+    "cz-conventional-changelog": "3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,json,md,css,scss,yml,yaml}": [
