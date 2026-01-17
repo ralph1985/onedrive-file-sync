@@ -41,6 +41,13 @@
 - Never commit `.env` or tokens.
 - `.auth/` and `.state/` are ignored and stay local.
 
+## Gestion de tareas y horas
+
+- Antes de empezar, identifica el `projectId` en `../../dashboard/data/projects.json`.
+- Busca si ya existe una tarea "En curso" en `../../dashboard/data/projects-tasks.json` para ese `projectId`.
+- Si existe, registra el tiempo en `../../dashboard/data/task-entries.json` con `taskId`, `date` (`dd/mm/aaaa`), `hours` y `note`; anade siempre una nota en `../../dashboard/data/task-notes.json`.
+- Si no existe, crea una nueva tarea (recomendado: `node ../../dashboard/scripts/add-task.js` desde el monorepo) o edita a mano en `projects-tasks.json` con `id` incremental, `title`, `projectId`, `phase`, `status`, `ownerId`, `startDate`, `endDate`, y luego anade la entrada de horas en `task-entries.json`.
+
 ## Commit Guidelines
 
 - Conventional commits (`feat:`, `fix:`, `chore:`, etc.).
