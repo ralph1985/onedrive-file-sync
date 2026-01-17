@@ -1,13 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REQUIRED_ENV = [
-  'LOCAL_FILE_PATH',
-  'ONEDRIVE_FILE_PATH',
-  'CLIENT_ID',
-  'TENANT_ID',
-  'REDIRECT_URI',
-] as const;
+const REQUIRED_ENV = ['CLIENT_ID', 'TENANT_ID', 'REDIRECT_URI'] as const;
 
 type EnvKey = (typeof REQUIRED_ENV)[number];
 
@@ -25,8 +19,6 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
 
 export const config = {
-  localFilePath: mustGetEnv('LOCAL_FILE_PATH'),
-  remoteFilePath: mustGetEnv('ONEDRIVE_FILE_PATH'),
   clientId: mustGetEnv('CLIENT_ID'),
   tenantId: mustGetEnv('TENANT_ID'),
   redirectUri: mustGetEnv('REDIRECT_URI'),

@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
 import crypto from 'node:crypto';
-import { config } from './config.js';
 import { downloadFile, getRemoteMetadata, uploadFile } from './graph.js';
 import { readState, writeState } from './state.js';
 
@@ -26,11 +25,16 @@ function isRemoteNewer(localMtimeMs: number, remoteMtimeMs: number): boolean {
   return remoteMtimeMs > localMtimeMs + 1000;
 }
 
-export async function syncOnce(token: string): Promise<void> {
+export type SyncPaths = {
+  localFilePath: string;
+  remoteFilePath: string;
+};
+
+export async function syncOnce(token: string, paths: SyncPaths): Promise<void> {
   const state = await readState();
 
-  const localExists = fsSync.existsSync(config.localFilePath);
-  const remoteItem = await getRemoteMetadata(token, config.remoteFilePath);
+  const localExists = fsSync.existsSync(paths.localFilePath);
+  const remoteItem = await getRemoteMetadata(token, paths.remoteFilePath);
   const remoteExists = Boolean(remoteItem);
 
   if (!localExists && !remoteExists) {
@@ -40,30 +44,30 @@ export async function syncOnce(token: string): Promise<void> {
 
   if (localExists && !remoteExists) {
     console.log('Remote missing. Uploading local file.');
-    await uploadFile(token, config.localFilePath, config.remoteFilePath);
+    await uploadFile(token, paths.localFilePath, paths.remoteFilePath);
   } else if (!localExists && remoteExists) {
     console.log('Local missing. Downloading remote file.');
-    await downloadFile(token, config.remoteFilePath, config.localFilePath);
+    await downloadFile(token, paths.remoteFilePath, paths.localFilePath);
   } else if (localExists && remoteExists) {
-    const stat = await fs.stat(config.localFilePath);
+    const stat = await fs.stat(paths.localFilePath);
     const localMtimeMs = stat.mtimeMs;
     const remoteMtimeMs = parseRemoteMtime(remoteItem);
 
     if (isLocalNewer(localMtimeMs, remoteMtimeMs)) {
       console.log('Local is newer. Uploading.');
-      await uploadFile(token, config.localFilePath, config.remoteFilePath);
+      await uploadFile(token, paths.localFilePath, paths.remoteFilePath);
     } else if (isRemoteNewer(localMtimeMs, remoteMtimeMs)) {
       console.log('Remote is newer. Downloading.');
-      await downloadFile(token, config.remoteFilePath, config.localFilePath);
+      await downloadFile(token, paths.remoteFilePath, paths.localFilePath);
     } else {
       console.log('No changes detected.');
     }
   }
 
-  if (fsSync.existsSync(config.localFilePath)) {
-    const stat = await fs.stat(config.localFilePath);
+  if (fsSync.existsSync(paths.localFilePath)) {
+    const stat = await fs.stat(paths.localFilePath);
     state.localMtimeMs = stat.mtimeMs;
-    state.localHash = await sha256File(config.localFilePath);
+    state.localHash = await sha256File(paths.localFilePath);
   }
 
   if (remoteItem?.lastModifiedDateTime) {

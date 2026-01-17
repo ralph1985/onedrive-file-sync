@@ -62,18 +62,14 @@ npm run commit
 ## First run (interactive)
 
 ```bash
-node dist/index.js
+./run.sh --local /path/to/local.db --remote backups/home-manager/local.db
 ```
 
 The first run will print an auth URL. Open it in a browser to grant access. Tokens are cached in `.auth/`.
 
-## CLI overrides
+## CLI required
 
-You can override the `.env` values per run:
-
-```bash
-./run.sh --local /path/to/local.db --remote backups/home-manager/local.db
-```
+This sync only runs when you pass `--local` and `--remote`. It will not read a default file from `.env`.
 
 ## Cron usage
 

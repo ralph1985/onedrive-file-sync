@@ -14,7 +14,19 @@ set -a
 source .env
 set +a
 
-if [ ! -d dist ]; then
+NEEDS_BUILD=0
+if [ ! -d dist ] || [ ! -f dist/index.js ]; then
+  NEEDS_BUILD=1
+else
+  for SRC in src/*.ts; do
+    if [ "$SRC" -nt dist/index.js ]; then
+      NEEDS_BUILD=1
+      break
+    fi
+  done
+fi
+
+if [ "$NEEDS_BUILD" -eq 1 ]; then
   npm run build
 fi
 
