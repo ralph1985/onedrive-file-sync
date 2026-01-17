@@ -1,22 +1,17 @@
 import 'dotenv/config';
-import fs from 'node:fs/promises';
-import { config } from './config.js';
-import { acquireToken } from './auth.js';
-import { ensureStateDir } from './state.js';
-import { syncOnce } from './sync.js';
+import { parseCliArgs } from './cli.js';
 
-async function ensureDirs(): Promise<void> {
-  await fs.mkdir(config.authDir, { recursive: true });
-  await ensureStateDir();
+const overrides = parseCliArgs(process.argv);
+if (overrides.localFilePath) {
+  process.env.LOCAL_FILE_PATH = overrides.localFilePath;
+}
+if (overrides.remoteFilePath) {
+  process.env.ONEDRIVE_FILE_PATH = overrides.remoteFilePath;
 }
 
-async function main(): Promise<void> {
-  await ensureDirs();
-  const token = await acquireToken();
-  await syncOnce(token);
-}
+const { runApp } = await import('./app.js');
 
-main().catch((err) => {
+runApp().catch((err) => {
   console.error(err instanceof Error ? err.message : err);
   process.exit(1);
 });

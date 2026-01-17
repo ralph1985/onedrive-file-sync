@@ -18,4 +18,4 @@ if [ ! -d dist ]; then
   npm run build
 fi
 
-node dist/index.js
+node dist/index.js "$@"

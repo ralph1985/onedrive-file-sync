@@ -67,6 +67,14 @@ node dist/index.js
 
 The first run will print an auth URL. Open it in a browser to grant access. Tokens are cached in `.auth/`.
 
+## CLI overrides
+
+You can override the `.env` values per run:
+
+```bash
+./run.sh --local /path/to/local.db --remote backups/home-manager/local.db
+```
+
 ## Cron usage
 
 Use the `run.sh` wrapper so the script runs from the project root and loads `.env`.
