@@ -82,7 +82,7 @@ Use the `run.sh` wrapper so the script runs from the project root and loads `.en
 Example cron (every 5 minutes):
 
 ```cron
-*/5 * * * * /Users/E054116/BBVA/desarrollo/personal/project-manager/projects/onedrive-file-sync/run.sh >> /tmp/onedrive-file-sync.log 2>&1
+*/5 * * * * /Users/rafa/personal/project-manager/projects/onedrive-file-sync/run.sh >> /tmp/onedrive-file-sync.log 2>&1
 ```
 
 ## Notes
