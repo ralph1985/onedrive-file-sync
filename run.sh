@@ -30,4 +30,5 @@ if [ "$NEEDS_BUILD" -eq 1 ]; then
   npm run build
 fi
 
-node dist/index.js "$@"
+NODE_BIN="/Users/E054116/.nvm/versions/node/v22.12.0/bin/node"
+"$NODE_BIN" dist/index.js "$@"
